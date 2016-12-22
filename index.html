@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>The Cube</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="renderer" content="webkit" />
+
+        <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.bootcss.com/json2/20160511/json2.js"></script>
+        <script type="text/javascript" src="https://cdn.bootcss.com/snap.svg/0.4.1/snap.svg-min.js"></script>
+
+        <script type="text/javascript" src="js/Math.uuid.js"></script>
+        <script type="text/javascript" src="js/svgkit.js"></script>
+
+        <script type="text/javascript" src="js/sets.js"></script>
+        <script type="text/javascript" src="js/d3.js"></script>
+        <script type="text/javascript" src="js/expression.js"></script>
+
+        <script type="text/javascript" src="js/face.js"></script>
+        <script type="text/javascript" src="js/block.js"></script>
+        <script type="text/javascript" src="js/cube.js"></script>
+
+        <script type="text/javascript" src="js/selector.js"></script>
+    </head>
+    <body>
+        <svg id="canvas" style="width: 640px; height: 480px; border: 1px solid black; margin: 10px;"></svg>
+        <div class="inputArea">
+            <span class="label">请输入选择内容</span>
+            <input type="text" id="iptExpr" onkeyup="iptKeyUp()" />
+            <button type="button" onclick="btnApplyClick()">应用</button>
+            <button type="button" onclick="btnResetClick()">清除</button>
+        </div>
+        <div class="description">
+            <div class="title">说明</div>
+            <ul>
+                <li>这是一个对魔方的选择子的练习页面, 可以使用 U, D, F, B, L, R 算子选择对应的运算所涉及的块的集合. 可以在上方的输入栏中输入尝试一下;</li>
+                <li>可以对选择的集合进行交并补运算, 使用 * 号求交集, + 号求并集, ! 求补集. 可以在上方输入栏中尝试一下, 分别录入 !R, !R+!L, !(R*F), R+L 尝试看看;</li>
+            </ul>
+        </div>
+        <div class="question">
+            <div class="title">联系题</div>
+            <p>下面出一些小联系题目看看是否掌握了上面的这套运算法:</p>
+            <ol>
+                <li>选中所有角块;</li>
+                <li>选中所有棱块;</li>
+                <li>选中所有中心块;</li>
+                <li>选中底十字;</li>
+                <li>选中顶层十字, 但不选顶层中心块.</li>
+            </ol>
+        </div>
+        <div class="result">
+            <p>这里是上面题目的参考答案, 需要注意的是, 答案并不唯一, 如果你有更简短的选法, 欢迎给我发邮件指正: <a href="mailto:esmool@qq.com">点击这里给我发邮件</a>.</p>
+            <ol>
+                <li>选中所有角块: (F+B)*(R+L)*(U+D)</li>
+                <li>选中所有棱块: TODO</li>
+                <li>选中所有中心块: TODO</li>
+                <li>选中底十字: TODO</li>
+                <li>选中顶层十字, 但不选顶层中心块: TODO</li>
+            </ol>
+        </div>
+        <script type="text/javascript">
+            var cube = null;
+            var canvas = null;
+
+            function main() {
+                var svg = document.getElementById('canvas');
+                cube = $.esmool.cube.create();
+                canvas = new Snap(svg);
+                filter();
+            }
+
+            function select(expr) {
+                var selection = !!expr ? $.esmool.selector.select(cube, expr) : {};
+                $.esmool.cube.draw(canvas, cube, selection, {
+                    Xg: 320, Yg: 240
+                }, {
+                    Ex: 30, Ey: -30
+                });
+            }
+
+            function filter() {
+                var expr = $('#iptExpr').val();
+                try {
+                    select(expr);
+                } catch (e) {
+                    $.messager.alert('注意', '输入的表达式存在错误, 请重新输入');
+                    reset();
+                }
+            }
+
+            function reset() {
+                $.esmool.cube.draw(canvas, cube, {});
+            }
+
+            function btnApplyClick() {
+                filter();
+            }
+
+            function btnResetClick() {
+                reset();
+            }
+
+            function iptKeyUp() {
+                if (event.keyCode !== 13)
+                    return;
+
+                filter();
+            }
+
+            $(document).ready(main);
+        </script>
+    </body>
+</html>
