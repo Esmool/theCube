@@ -21,42 +21,81 @@
         <script type="text/javascript" src="js/cube.js"></script>
 
         <script type="text/javascript" src="js/selector.js"></script>
+        <style type="text/css">
+            .hidden {
+                display: none !important;
+            }
+
+            .section {
+                margin: 10px;
+                font-size: 12px;
+                font-family: Microsoft YaHei;
+                line-height: 200%;
+            }
+
+            .section>.title {
+                font-size: 14px;
+                font-weight: bold;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+
+            .section>ol>li>span.r {
+                color: brown;
+            }
+        </style>
     </head>
     <body>
         <svg id="canvas" style="width: 640px; height: 480px; border: 1px solid black; margin: 10px;"></svg>
-        <div class="inputArea">
+        <div class="inputArea section">
             <span class="label">请输入选择内容</span>
-            <input type="text" id="iptExpr" onkeyup="iptKeyUp()" />
+            <input type="text" id="iptExpr" onkeyup="iptKeyUp()" style="width: 457px;" />
             <button type="button" onclick="btnApplyClick()">应用</button>
             <button type="button" onclick="btnResetClick()">清除</button>
         </div>
-        <div class="description">
+        <div class="description section">
             <div class="title">说明</div>
             <ul>
                 <li>这是一个对魔方的选择子的练习页面, 可以使用 U, D, F, B, L, R 算子选择对应的运算所涉及的块的集合. 可以在上方的输入栏中输入尝试一下;</li>
                 <li>可以对选择的集合进行交并补运算, 使用 * 号求交集, + 号求并集, ! 求补集. 可以在上方输入栏中尝试一下, 分别录入 !R, !R+!L, !(R*F), R+L 尝试看看;</li>
             </ul>
         </div>
-        <div class="question">
-            <div class="title">联系题</div>
-            <p>下面出一些小联系题目看看是否掌握了上面的这套运算法:</p>
+        <div class="question section">
+            <div class="title">练习题</div>
+            <p>下面出一些小练习题目看看是否掌握了上面的这套运算法:</p>
             <ol>
+                <li>选中顶层东北方向三块;</li>
+                <li>选中顶层正西放角块;</li>
+                <li>选中东南侧立层中间横排三块;</li>
+                <li>选中底层中心块;</li>
+                <li>选中所有中层棱;</li>
                 <li>选中所有角块;</li>
                 <li>选中所有棱块;</li>
                 <li>选中所有中心块;</li>
                 <li>选中底十字;</li>
                 <li>选中顶层十字, 但不选顶层中心块.</li>
             </ol>
+            <button type="button" onclick="$('.result').removeClass('hidden')">查看答案</button>&nbsp;&nbsp;(建议先动脑筋思考思考)
         </div>
-        <div class="result">
-            <p>这里是上面题目的参考答案, 需要注意的是, 答案并不唯一, 如果你有更简短的选法, 欢迎给我发邮件指正: <a href="mailto:esmool@qq.com">点击这里给我发邮件</a>.</p>
+        <div class="result section hidden">
+            <div class="title">参考答案</div>
+            <p>这里是上面题目的参考答案, 需要注意的是, 答案并不唯一, 如果你有更简短的选法, 欢迎给我发邮件指正: esmool@qq.com</p>
             <ol>
-                <li>选中所有角块: (F+B)*(R+L)*(U+D)</li>
-                <li>选中所有棱块: TODO</li>
-                <li>选中所有中心块: TODO</li>
-                <li>选中底十字: TODO</li>
-                <li>选中顶层十字, 但不选顶层中心块: TODO</li>
+                <li>选中顶层东北方向三块: <span class="r">U*B</span></li>
+                <li>选中顶层正西放角块: <span class="r">U*L*F</span></li>
+                <li>选中东南侧立层中间横排三块: <span class="r">!U*!D*R</span></li>
+                <li>选中底层中心块: <span class="r">D*!F*!B*!R*!L</span></li>
+                <li>选中所有中层棱: <span class="r">!U*!D*(F+B)*(R+L)</span></li>
+                <li>选中所有角块: <span class="r">(F+B)*(R+L)*(U+D)</span></li>
+                <li>选中所有棱块: <span class="r">!(F+B)*(U+D)*(R+L)+(F+B)*!(U+D)*(R+L)+(F+B)*(U+D)*!(R+L)</span></li>
+                <li>选中所有中心块: <span class="r">!((F+B+U+D)*(U+D+R+L)*(R+L+F+B))</span></li>
+                <li>选中底十字: <span class="r">D*!((F+B)*(R+L))</span></li>
+                <li>选中顶层十字, 但不选顶层中心块: <span class="r">(F+B)*!(R+L)*U+!(F+B)*(R+L)*U</span></li>
             </ol>
+        </div>
+        <div class="more section">
+            <div class="title">关于</div>
+            <p>这是我的《魔方求解公式的原理分析》一文所配套演示程序, 用于让读者通过动手操作直观理解魔方选择算子的用法和规律. 本套程序依照MIT源协议开放, 可以在<a href="https://github.com/Esmool/theCube">Github</a>上找到全部源码.
         </div>
         <script type="text/javascript">
             var cube = null;
