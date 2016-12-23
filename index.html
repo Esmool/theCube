@@ -48,6 +48,7 @@
     <body>
         <svg id="canvas" style="width: 640px; height: 480px; border: 1px solid black; margin: 10px;"></svg>
         <div class="inputArea section">
+            <!-- TODO 这里要调整 -->
             <span class="label">请输入选择内容</span>
             <input type="text" id="iptExpr" onkeyup="iptKeyUp()" style="width: 457px;" />
             <button type="button" onclick="btnApplyClick()">应用</button>
@@ -108,9 +109,17 @@
                 filter();
             }
 
-            function select(expr) {
-                var selection = !!expr ? $.esmool.selector.select(cube, expr) : {};
-                $.esmool.cube.draw(canvas, cube, selection, {
+            function select(exprs) {
+                // TODO: 这里要调整
+                var selections = [];
+                for (var i=0; i<exprs.length; i++) {
+                    var expr = exprs[i];
+                    selection.push({
+                        expr: !!expr[i] ? $.esmool.selector.select(cube, expr) : {},
+                        color: expr.color
+                    });
+                }
+                $.esmool.cube.draw(canvas, cube, selections, {
                     Xg: 320, Yg: 240
                 }, {
                     Ex: 30, Ey: -30
@@ -128,7 +137,12 @@
             }
 
             function reset() {
-                $.esmool.cube.draw(canvas, cube, {});
+                // TODO: 这里要调整
+                $.esmool.cube.draw(canvas, cube, [], {
+                    Xg: 320, Yg: 240
+                }, {
+                    Ex: 30, Ey: -30
+                });
             }
 
             function btnApplyClick() {

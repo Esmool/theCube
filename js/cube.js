@@ -111,32 +111,38 @@
 		};
 	}
 
-	$.esmool.cube.draw = function (canvas, cube, selection, center, units) {
+	$.esmool.cube.draw = function (canvas, cube, selections, center, units) {
+		// TODO: 这里还是要仔细检查一下的好
+		var gethorFunc = function (selection) {
+			for (var bId in blocks) {
+				var b = blocks[bId];
+				var bFaces = cube.b2fMaps[bId];
+				var selected = !!selection[bId];
+
+				if (!bFaces || !Object.keys(bFaces).length)
+					continue;
+
+				for (var fId in bFaces) {
+					var f = faces[fId];
+					var p = $.esmool.face.getPiece(f);
+					pieces.push({ piece: p, selected: selected, selection.color });
+				}
+			}
+		};
+
 		var blocks = cube.blocks;
 		var faces = cube.faces;
-
 		var pieces = [];
-		for (var bId in blocks) {
-			var b = blocks[bId];
-			var bFaces = cube.b2fMaps[bId];
-			var selected = !!selection[bId];
 
-			if (!bFaces || !Object.keys(bFaces).length)
-				continue;
-
-			for (var fId in bFaces) {
-				var f = faces[fId];
-				var p = $.esmool.face.getPiece(f);
-				pieces.push({ piece: p, selected: selected });
-			}
-		}
+		for (var k in selections)
+			gethorFunc(selections[k]);
 
 		canvas.clear();
 		for (var i=0; i<pieces.length; i++) {
 			var p = pieces[i];
 			$.esmool.svgkit.drawPiece(canvas, p.piece, {
 				stroke: 'black',
-				fill: !p.selected ? 'white' : 'gray'
+				fill: !p.selected ? 'white' : p.color
 			}, center, units);
 		}
 	};
