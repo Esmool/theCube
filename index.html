@@ -53,6 +53,7 @@
             <input type="text" id="iptExpr" onkeyup="iptKeyUp()" style="width: 457px;" />
             <button type="button" onclick="btnApplyClick()">应用</button>
             <button type="button" onclick="btnResetClick()">清除</button>
+            <div class="history"></div>
         </div>
         <div class="description section">
             <div class="title">说明</div>
@@ -110,13 +111,13 @@
             }
 
             function select(exprs) {
-                // TODO: 这里要调整
                 var selections = [];
                 for (var i=0; i<exprs.length; i++) {
-                    var expr = exprs[i];
-                    selection.push({
-                        expr: !!expr[i] ? $.esmool.selector.select(cube, expr) : {},
-                        color: expr.color
+                    var expr = exprs[i].expr;
+                    var color = exprs[i].color;
+                    selections.push({
+                        expr: !!expr ? $.esmool.selector.select(cube, expr) : {},
+                        color: color
                     });
                 }
                 $.esmool.cube.draw(canvas, cube, selections, {
@@ -127,22 +128,18 @@
             }
 
             function filter() {
+                // TODO: 这里需要增加颜色选择器, 然后把操作历史一个一个收集起来, 提供上色支持
                 var expr = $('#iptExpr').val();
                 try {
-                    select(expr);
+                    select([{ expr: expr, color: 'gray' }]);
                 } catch (e) {
-                    $.messager.alert('注意', '输入的表达式存在错误, 请重新输入');
+                    alert('输入的表达式存在错误, 请重新输入');
                     reset();
                 }
             }
 
             function reset() {
-                // TODO: 这里要调整
-                $.esmool.cube.draw(canvas, cube, [], {
-                    Xg: 320, Yg: 240
-                }, {
-                    Ex: 30, Ey: -30
-                });
+                select([{ expr: null, color: 'white' }]);
             }
 
             function btnApplyClick() {

@@ -17,8 +17,7 @@
 		'z': { 'X': 'x', 'Y': 'y' }
 	};
 
-	$.esmool.d3.getD2AxisD3Name = function (d2Axis, normal) {
-		return D2_TO_D3_MAP[normal][d2Axis];
-	};
+	$.esmool.d3.getD2AxisD3Name = (d2Axis, normal) =>
+		D2_TO_D3_MAP[normal][d2Axis];
 
 })(jQuery);

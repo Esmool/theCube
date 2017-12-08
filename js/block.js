@@ -5,26 +5,24 @@
 
 	$.esmool.block = {};
 
-	$.esmool.block.create = function (x, y, z) {
-		return {
-			id: Math.uuid(),
-			x: x,
-			y: y,
-			z: z
-		};
-	};
+	$.esmool.block.create = (x, y, z) => { return {
+		id: Math.uuid(),
+		x: x,
+		y: y,
+		z: z
+	}; };
 
-	$.esmool.block.createMaps = function (blocks) {
+	$.esmool.block.createMaps = blocks => {
 		var maps = {};
 		maps.all = {};
 
-		var checkMap = function (m, source) {
+		var checkMap = (m, source) => {
 			if (!m[source])
 				m[source] = {};
 			return m[source];
 		};
 
-		var mapper = function (axis, block) {
+		var mapper = (axis, block) => {
 			var coord = block[axis];
 			var map = checkMap(maps, axis);
 			var set = checkMap(map, coord);

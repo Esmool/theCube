@@ -5,15 +5,15 @@
 
 	$.esmool.sets = {};
 
-	var mulitpleKit = function (a, bs, f) {
+	var mulitpleKit = (a, bs, f) => {
 		var A = a;
 		for (var i=0; i<bs.length; i++)
 			A = f(A, bs[i]);
 		return A;
 	};
 
-	$.esmool.sets.union = function (a, ...bs) {
-		return mulitpleKit(a, bs, function (x, y) {
+	$.esmool.sets.union = (a, ...bs) => {
+		return mulitpleKit(a, bs, (x, y) => {
 			var s = {};
 
 			for (var k in x)
@@ -26,8 +26,8 @@
 		});
 	};
 
-	$.esmool.sets.intersect = function (a, ...bs) {
-		return mulitpleKit(a, bs, function (x, y) {
+	$.esmool.sets.intersect = (a, ...bs) => {
+		return mulitpleKit(a, bs, (x, y) => {
 			var s = {};
 
 			for (var k in x) {
@@ -41,8 +41,8 @@
 		});
 	};
 
-	$.esmool.sets.sub = function (a, ...bs) {
-		return mulitpleKit(a, bs, function (x, y) {
+	$.esmool.sets.sub = (a, ...bs) => {
+		return mulitpleKit(a, bs, (x, y) => {
 			var s = {};
 
 			for (var k in x) {

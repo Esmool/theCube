@@ -31,44 +31,34 @@
 		')' : -10
 	};
 
-	var isOP = function (c) {
-		return !!OPS[c];
-	};
+	var isOP = c => !!OPS[c];
 
-	var isSPACE = function (c) {
-		return SPACES.test(c);
-	};
+	var isSPACE = c => SPACES.test(c);
 
-	var isChar = function (c) {
-		return CHARS.test(c);
-	};
+	var isChar = c => CHARS.test(c);
 
-	var isDELIMITER = function (c) {
-		return c == '(' || c == ')';
-	};
+	var isDELIMITER = c => c == '(' || c == ')';
 
-	var getOPNode = function (op) {
+	var getOPNode = op => {
 		var template = OP_TEMPLATE[op];
 		var json = JSON.stringify(template);
 		var node = JSON.parse(json);
 		return node;
 	};
 
-	var getCharNode = function (c) {
+	var getCharNode = c => {
 		var json = JSON.stringify(CHR_TEMPLATE);
 		var node = JSON.parse(json);
 		node.char = c;
 		return node;
 	};
 
-	var getOPElement = function (op, prv) {
-		return {
-			op: op,
-			PRV: prv
-		};
-	};
+	var getOPElement = (op, prv) => { return {
+		op: op,
+		PRV: prv
+	}; };
 
-	var handleOP = function (nodeStack, op) {
+	var handleOP = (nodeStack, op) => {
 		var OP = OPS[op];
 		var node = getOPNode(op);
 
@@ -84,7 +74,7 @@
 		nodeStack.push(node);
 	};
 
-	var pushOP = function (nodeStack, opStack, opElement) {
+	var pushOP = (nodeStack, opStack, opElement) => {
 		if (opStack.length == 0) {
 			opStack.push(opElement);
 			return;
@@ -101,7 +91,7 @@
 		pushOP(nodeStack, opStack, opElement);
 	};
 
-	$.esmool.expression.parse = function (expr) {
+	$.esmool.expression.parse = expr => {
 		var nodeStack = [];
 		var opStack = [];
 		var prePRV = 0;
@@ -143,15 +133,12 @@
 		return nodeStack[0];
 	};
 
-	$.esmool.expression.evaluate = function (expr, operations) {
+	$.esmool.expression.evaluate = (expr, operations) => {
 		var tree = $.esmool.expression.parse(expr);
 
-		var evaluator = function (node) {
-			if (node.type == 'chr')
-				return operations[node.char]();
-
-			return operations[node.OP](node.children, evaluator);
-		};
+		var evaluator = node => node.type == 'chr' ?
+			operations[node.char]() :
+			operations[node.OP](node.children, evaluator);
 
 		return evaluator(tree);
 	};

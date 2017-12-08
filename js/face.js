@@ -44,14 +44,16 @@
 		'z': { X:     0, Y: - 1 }
 	};
 
-	var vec_multiple = function (V, k) {
-		return { X: V.X * k, Y : V.Y * k };
-	};
+	var vec_multiple = (V, k) => { return {
+		X: V.X * k,
+		Y : V.Y * k
+	}; };
 
-	var vec_add = function (V, ...args) {
-		var add = function (v, w) {
-			return { X: v.X + w.X, Y: v.Y + w.Y };
-		};
+	var vec_add = (V, ...args) => {
+		var add = (v, w) => { return {
+			X: v.X + w.X,
+			Y: v.Y + w.Y
+		}; };
 
 		var A = V;
 		for (var i=0; i<args.length; i++)
@@ -59,7 +61,7 @@
 		return A;
 	};
 
-	$.esmool.face.create = function (axis, side, X, Y) {
+	$.esmool.face.create = (axis, side, X, Y) => {
 		var d3XName = $.esmool.d3.getD2AxisD3Name('X', axis);
 		var d3YName = $.esmool.d3.getD2AxisD3Name('Y', axis);
 
@@ -75,17 +77,17 @@
 		return obj;
 	};
 
-	$.esmool.face.createMaps = function (faces) {
+	$.esmool.face.createMaps = faces => {
 		var maps = {};
 		maps.all = {};
 
-		var checkMap = function (m, source) {
+		var checkMap = (m, source) => {
 			if (!m[source])
 				m[source] = {};
 			return m[source];
 		};
 
-		var mapper = function (face) {
+		var mapper = face => {
 			var d3XName = $.esmool.d3.getD2AxisD3Name('X', face.axis);
 			var d3YName = $.esmool.d3.getD2AxisD3Name('Y', face.axis);
 			var aMaps = checkMap(maps, face.axis);
@@ -107,7 +109,7 @@
 		return maps;
 	};
 
-	var getStartPoint = function (face) {
+	var getStartPoint = face => {
 		var axis = face.axis;
 		var d3XName = $.esmool.d3.getD2AxisD3Name('X', axis);
 		var d3YName = $.esmool.d3.getD2AxisD3Name('Y', axis);
@@ -127,18 +129,14 @@
 		return vec_add(d3XOffset, d3YOffset, d3ZOffset);
 	};
 
-	var copy = function (obj) {
+	var copy = obj => {
 		var json = JSON.stringify(obj);
 		return JSON.parse(json);
 	};
 
-	$.esmool.face.getPiece = function (face) {
-		var axis = face.axis;
-
-		return {
-			startPoint: getStartPoint(face),
-			path: copy($.esmool.face.SHAPES[axis])
-		};
-	};
+	$.esmool.face.getPiece = face => { return {
+		startPoint: getStartPoint(face),
+		path: copy($.esmool.face.SHAPES[face.axis])
+	}; };
 
 })(jQuery);

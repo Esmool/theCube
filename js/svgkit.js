@@ -7,46 +7,40 @@
 
     var parameter = {};
 
-    var pathBuilder = function () {
+    var pathBuilder = () => {
         var path = [];
         var builder = {};
 
-        builder.M = function (P) {
+        builder.M = P => {
             path.push('M' + P.X + ',' + P.Y);
             return builder;
         };
 
-        builder.l = function (P) {
+        builder.l = P => {
             path.push('l' + P.X + ',' + P.Y);
             return builder;
         };
 
-        builder.Z = function (P) {
+        builder.Z = P => {
             path.push('Z');
             return builder;
         };
 
-        builder.build = function () {
-            return path.join('');
-        }
+        builder.build = () => path.join('');
 
         return builder;
     };
 
-    $.esmool.svgkit.drawPiece = function (svg, path, options, offset, units) {
-        var mapPoint = function (p) {
-            return {
-                X: p.X * units.Ex + offset.Xg,
-                Y: p.Y * units.Ey + offset.Yg
-            };
-        };
+    $.esmool.svgkit.drawPiece = (svg, path, options, offset, units) => {
+        var mapPoint = p => { return {
+            X: p.X * units.Ex + offset.Xg,
+            Y: p.Y * units.Ey + offset.Yg
+        }; };
 
-        var mapDPoint = function (p) {
-            return {
-                X: p.X * units.Ex,
-                Y: p.Y * units.Ey
-            };
-        };
+        var mapDPoint = p => { return {
+            X: p.X * units.Ex,
+            Y: p.Y * units.Ey
+        }; };
 
         var builder = pathBuilder();
         builder.M(mapPoint(path.startPoint));

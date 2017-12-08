@@ -5,7 +5,7 @@
 
 	$.esmool.cube = {};
 
-	$.esmool.cube.create = function () {
+	$.esmool.cube.create = () => {
 		var bSuit = createBlocks();
 		var fSuit = createFaces();
 		var maps = createBridgeMaps(bSuit, fSuit);
@@ -70,13 +70,13 @@
 		var b2fMaps = {};
 		var f2bMap = {};
 
-		var checkMap = function (m, src) {
+		var checkMap = (m, src) => {
 			if (!m[src])
 				m[src] = {};
 			return m[src];
 		};
 
-		var getFirstKey = function (obj) {
+		var getFirstKey = (obj) => {
 			var tmp = null;
 			for (var k in obj) {
 				tmp = k;
@@ -111,13 +111,13 @@
 		};
 	}
 
-	$.esmool.cube.draw = function (canvas, cube, selections, center, units) {
+	$.esmool.cube.draw = (canvas, cube, selections, center, units) => {
 		// TODO: 这里还是要仔细检查一下的好
-		var gethorFunc = function (selection) {
+		var gethorFunc = selection => {
 			for (var bId in blocks) {
 				var b = blocks[bId];
 				var bFaces = cube.b2fMaps[bId];
-				var selected = !!selection[bId];
+				var selected = !!selection.expr[bId];
 
 				if (!bFaces || !Object.keys(bFaces).length)
 					continue;
@@ -125,21 +125,25 @@
 				for (var fId in bFaces) {
 					var f = faces[fId];
 					var p = $.esmool.face.getPiece(f);
-					pieces.push({ piece: p, selected: selected, selection.color });
+					pieces[fId] = {
+						piece: p,
+						selected: selected,
+						color: selection.color
+					};
 				}
 			}
 		};
 
 		var blocks = cube.blocks;
 		var faces = cube.faces;
-		var pieces = [];
+		var pieces = {};
 
 		for (var k in selections)
 			gethorFunc(selections[k]);
 
 		canvas.clear();
-		for (var i=0; i<pieces.length; i++) {
-			var p = pieces[i];
+		for (var fId in pieces) {
+			var p = pieces[fId];
 			$.esmool.svgkit.drawPiece(canvas, p.piece, {
 				stroke: 'black',
 				fill: !p.selected ? 'white' : p.color

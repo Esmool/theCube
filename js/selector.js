@@ -14,34 +14,32 @@
 		'B': { axis: 'y', value: 2 }
 	};
 
-	$.esmool.selector.select = function (cube, expression) {
-		var selectee = function (letter) {
+	$.esmool.selector.select = (cube, expression) => {
+		var selectee = letter => {
 			var LTR = $.esmool.selector.LETTERS[letter];
 			return cube.bMaps[LTR.axis][LTR.value];
 		};
 
-		var getNot = function (set) {
-			return $.esmool.sets.sub(cube.bMaps.all, set);
-		};
+		var getNot = set => $.esmool.sets.sub(cube.bMaps.all, set);
 
 		return $.esmool.expression.evaluate(expression, {
-			'R': function () { return selectee('R'); },
-			'L': function () { return selectee('L'); },
-			'U': function () { return selectee('U'); },
-			'D': function () { return selectee('D'); },
-			'F': function () { return selectee('F'); },
-			'B': function () { return selectee('B'); },
-			'+': function (children, evaluator) {
-				var v0 = evaluator(children[0]);
-				var v1 = evaluator(children[1]);
-				return $.esmool.sets.union(v0, v1);
-			},
-			'*': function (children, evaluator) {
-				var v0 = evaluator(children[0]);
-				var v1 = evaluator(children[1]);
-				return $.esmool.sets.intersect(v0, v1);
-			},
-			'!': function (children, evaluator) {
+			'R': () => selectee('R'),
+			'L': () => selectee('L'),
+			'U': () => selectee('U'),
+			'D': () => selectee('D'),
+			'F': () => selectee('F'),
+			'B': () => selectee('B'),
+			'+': (children, evaluator) =>
+				$.esmool.sets.union(
+					evaluator(children[0]),
+					evaluator(children[1])
+				),
+			'*': (children, evaluator) =>
+				$.esmool.sets.intersect(
+					evaluator(children[0]),
+					evaluator(children[1])
+				),
+			'!': (children, evaluator) => {
 				var child = children[0];
 				var childResult = child.type == 'chr' ? selectee(child.char) : evaluator(child);
 				return getNot(childResult);
